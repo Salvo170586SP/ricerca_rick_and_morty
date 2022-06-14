@@ -10,20 +10,11 @@
           <div v-if="!filteredCharacters.length" class="text-center">
             <h2>la ricerca non ha prodotto nessun risultato</h2>
           </div>
-          <div
-            v-else
-            class="col text-center py-4"
+          <CardCharacters
             v-for="(character, index) in filteredCharacters"
             :key="index"
-          >
-            <img :src="character.image" class="shadow" alt="" />
-            <h2>{{ character.name }}</h2>
-            <div class="d-flex justify-content-center py-2">
-              <div class="linea"></div>
-            </div>
-            <p>Specie: {{ character.species }}</p>
-            <p >Location: {{ character.location.name }}</p>
-          </div>
+            :character="character"
+          />
         </div>
       </div>
     </main>
@@ -32,12 +23,14 @@
 
 <script>
 import Header from "./components/Header.vue";
+import CardCharacters from "./components/CardCharacters.vue";
 import axios from "axios";
 
 export default {
   name: "App",
   components: {
     Header,
+    CardCharacters,
   },
   data() {
     return {
@@ -77,25 +70,15 @@ export default {
 
 <style lang="scss">
 @import "./assets/scss/app.scss";
-input{
-      border: 0;
-    border-radius: 10px;
-    padding: 10px;
-    width: 300px;
-    outline: 0;
-    transition: 0.5s ease;
+input {
+  border: 0;
+  border-radius: 10px;
+  padding: 10px;
+  width: 300px;
+  outline: 0;
+  transition: 0.5s ease;
 }
-input:focus-visible{
-      box-shadow: black 0px 0px 10px -4px;
-
-}
-
-img {
-  border-radius: 50%;
-}
-
-.linea{
-  border-bottom: 2px solid black;
-  width: 150px;
+input:focus-visible {
+  box-shadow: black 0px 0px 10px -4px;
 }
 </style>
