@@ -10,6 +10,22 @@
           <div v-if="!filteredCharacters.length" class="text-center">
             <h2>la ricerca non ha prodotto nessun risultato</h2>
           </div>
+          <div class="col-12">
+            <nav aria-label="Page navigation example">
+              <ul class="pagination justify-content-center">
+                <li class="page-item" :class="{ disabled: !this.pages.prev }">
+                  <span class="page-link" role="button" @click="getPage('prev')"
+                    >Previous</span
+                  >
+                </li>
+                <li class="page-item" :class="{ disabled: !this.pages.next }">
+                  <span class="page-link" role="button" @click="getPage('next')"
+                    >Next</span
+                  >
+                </li>
+              </ul>
+            </nav>
+          </div>
           <CardCharacters
             v-for="(character, index) in filteredCharacters"
             :key="index"
@@ -36,6 +52,7 @@ export default {
     return {
       characters: [],
       text: "",
+      pages: { prev: null, next: null },
     };
   },
   computed: {
@@ -47,12 +64,18 @@ export default {
     },
   },
   methods: {
-    getCharacters() {
+    getPage(dir) {
+      if (!this.pages[dir]) return;
+      this.getCharacters(this.pages[dir]);
+    },
+    getCharacters(url) {
       axios
-        .get("https://rickandmortyapi.com/api/character/")
+        .get(url)
         .then((res) => {
           this.characters = res.data.results;
-          console.log(this.characters);
+
+          const { next, prev } = res.data.info;
+          this.pages = { prev, next };
         })
         .catch((err) => {
           console.error(err);
@@ -63,7 +86,7 @@ export default {
     },
   },
   mounted() {
-    this.getCharacters();
+    this.getCharacters("https://rickandmortyapi.com/api/character/");
   },
 };
 </script>
